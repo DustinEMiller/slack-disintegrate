@@ -1,0 +1,9 @@
+slira.sublime-project
+slira.sublime-workspace
+node_modules
+.grunt
+logs
+*.log
+*.pid
+*.seed
+build/Release

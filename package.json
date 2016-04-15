@@ -1,0 +1,25 @@
+{
+  "name": "slack-disintegrate",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon --debug index.js",
+    "lint": "eslint --ext .js --ext .jsx ./ && echo No linting errors."
+  },
+  "dependencies": {
+    "async-polling": "^0.2.1",
+    "bluebird": "^3.3.5",
+    "getenv": "^0.6.0",
+    "hapi": "^13.2.2",
+    "hapi-auth-basic": "^4.1.0",
+    "joi": "^8.0.5",
+    "mongoose": "^4.4.12",
+    "node-uuid": "^1.4.7",
+    "request": "^2.69.0"
+  },
+  "engines": {
+    "node": "5.x"
+  }
+}
