@@ -9,6 +9,7 @@
     "lint": "eslint --ext .js --ext .jsx ./ && echo No linting errors."
   },
   "dependencies": {
+    "@slack/client": "^2.3.0",
     "async-polling": "^0.2.1",
     "bluebird": "^3.3.5",
     "getenv": "^0.6.0",

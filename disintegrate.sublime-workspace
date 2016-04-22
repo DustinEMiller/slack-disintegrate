@@ -31,7 +31,7 @@
 			"file": "package.json",
 			"settings":
 			{
-				"buffer_size": 561,
+				"buffer_size": 592,
 				"line_ending": "Unix"
 			}
 		},
@@ -44,26 +44,18 @@
 			}
 		},
 		{
-			"file": "routes.js",
+			"file": "utils/message.processing.js",
 			"settings":
 			{
-				"buffer_size": 174,
+				"buffer_size": 82,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "controllers/message.js",
+			"file": "models/message.js",
 			"settings":
 			{
-				"buffer_size": 381,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "utils/slack.js",
-			"settings":
-			{
-				"buffer_size": 123,
+				"buffer_size": 0,
 				"line_ending": "Windows"
 			}
 		},
@@ -71,7 +63,15 @@
 			"file": "config.js",
 			"settings":
 			{
-				"buffer_size": 509,
+				"buffer_size": 461,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "bot.js",
+			"settings":
+			{
+				"buffer_size": 1278,
 				"line_ending": "Windows"
 			}
 		}
@@ -114,12 +114,15 @@
 	"expanded_folders":
 	[
 		"/H/Projects/slack-disintegrate",
-		"/H/Projects/slack-disintegrate/controllers",
 		"/H/Projects/slack-disintegrate/models",
 		"/H/Projects/slack-disintegrate/utils"
 	],
 	"file_history":
 	[
+		"/H/Projects/slack-disintegrate/bot.js",
+		"/H/Projects/slack-disintegrate/controllers/message.js",
+		"/H/Projects/slack-disintegrate/utils/slack.js",
+		"/H/Projects/slack-disintegrate/routes.js",
 		"/H/Projects/slira/config.js",
 		"/C/Users/dumiller/Downloads/medicare-2016-layout.html",
 		"/H/Projects/slira/routes.js",
@@ -243,11 +246,7 @@
 		"/C/Users/dumiller/Desktop/version.php",
 		"/Y/zip/api/Helpers/Cxn.php",
 		"/Y/zip/api/Endpoints.php",
-		"/Y/web.config",
-		"/Y/sf/oauth_callback.php",
-		"/Y/zip/api/Models/Meeting.php",
-		"/Y/sf/oauth.php",
-		"/Y/zip/api/Models/ZIP.php"
+		"/Y/web.config"
 	],
 	"find":
 	{
@@ -431,7 +430,7 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 5,
 			"sheets":
 			[
 				{
@@ -440,7 +439,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 561,
+						"buffer_size": 592,
 						"regions":
 						{
 						},
@@ -461,7 +460,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
@@ -477,8 +476,8 @@
 						"selection":
 						[
 							[
-								172,
-								172
+								13,
+								0
 							]
 						],
 						"settings":
@@ -491,24 +490,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
 					"buffer": 2,
-					"file": "routes.js",
+					"file": "utils/message.processing.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 174,
+						"buffer_size": 82,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								159,
-								159
+								82,
+								82
 							]
 						],
 						"settings":
@@ -524,50 +523,19 @@
 				},
 				{
 					"buffer": 3,
-					"file": "controllers/message.js",
+					"file": "models/message.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 381,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								280,
-								280
-							]
-						],
-						"settings":
-						{
-							"auto_name": "",
-							"syntax": "Packages/JavaScriptNext - ES6 Syntax/JavaScriptNext.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "utils/slack.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 123,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								13,
-								13
+								0,
+								0
 							]
 						],
 						"settings":
@@ -578,24 +546,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 4,
 					"file": "config.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 509,
+						"buffer_size": 461,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								506,
-								506
+								13,
+								0
 							]
 						],
 						"settings":
@@ -608,7 +576,35 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "bot.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1278,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								818,
+								818
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScriptNext - ES6 Syntax/JavaScriptNext.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
 					"type": "text"
 				}
 			]
