@@ -2,7 +2,12 @@
 
 const RtmClient = require('@slack/client').RtmClient;
 const config = require('./config');
-const slack = new RtmClient(config.slack.botToken);
+const slack = new RtmClient(config.slack.botToken, {
+  logLevel: 'error', 
+  dataStore: new MemoryDataStore(),
+  autoReconnect: true,
+  autoMark: true
+});
 const CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS;
 const RTM_EVENTS = require('@slack/client').RTM_EVENTS;
 const message = require('./models/message');
@@ -28,12 +33,20 @@ slack.on(RTM_CLIENT_EVENTS.RTM_CONNECTION_OPENED, function () {
 
 //listen
 slack.on(RTM_EVENTS.MESSAGE, function (message) {
+  if (message.text.startsWith('!kill' + ' ') {
+    let channelId = message.channel,
+        channelName = slack.dataStore.getChannelGroupOrDMById(message.channel),
+        parts = message.text.split(' ', 4),
+        time = parts[1],
+        metric = parts[2];
+  }
   // Listens to all `message` events from the team
 });
 
 polling.on('error', function (error) {
     // The polling encountered an error, handle it here. 
 });
+
 polling.on('result', function (result) {
     // The polling yielded some result, process it here. 
 });
