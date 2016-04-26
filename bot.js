@@ -34,11 +34,13 @@ slack.on(RTM_CLIENT_EVENTS.RTM_CONNECTION_OPENED, function () {
 //listen
 slack.on(RTM_EVENTS.MESSAGE, function (message) {
   if (message.text.startsWith('!kill' + ' ') {
-    let channelId = message.channel,
+    let channel = message.channel,
         channelName = slack.dataStore.getChannelGroupOrDMById(message.channel),
         parts = message.text.split(' ', 4),
         time = parts[1],
-        metric = parts[2];
+        metric = parts[2],
+        user = message.user,
+        timestamp = message.tp;
   }
   // Listens to all `message` events from the team
 });
