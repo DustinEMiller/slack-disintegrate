@@ -1,5 +1,5 @@
-slira.sublime-project
-slira.sublime-workspace
+*.sublime-project
+*.sublime-workspace
 node_modules
 .grunt
 logs
