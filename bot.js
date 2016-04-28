@@ -15,7 +15,7 @@ const message = require('./models/message');
 var AsyncPolling = require('async-polling');
 
 var polling = AsyncPolling(function (end) {
-    // Every 5 seconds check database for messages that need purged via message.model
+    // Every 1 second check database for messages that need purged via message.model
   	// This will send the message 'this is a test message' to the channel identified by id 'C0CHZA86Q'
   	slack.sendMessage('this is a test message', 'C0CHZA86Q', function messageSent() {
     	// optionally, you can supply a callback to execute once the message has been sent
@@ -23,7 +23,7 @@ var polling = AsyncPolling(function (end) {
   	// Here I want to stop the polling: 
     this.stop();
     end();
-}, 3000);
+}, 1000);
 
 slack.start();
 
@@ -37,10 +37,10 @@ slack.on(RTM_EVENTS.MESSAGE, function (message) {
     let channel = message.channel,
         channelName = slack.dataStore.getChannelGroupOrDMById(message.channel),
         parts = message.text.split(' ', 4),
-        time = parts[1],
-        metric = parts[2],
+        interval = parts[1],
+        intervalType = parts[2],
         user = message.user,
-        timestamp = message.tp;
+        timestamp = message.ts;
   }
   // Listens to all `message` events from the team
 });

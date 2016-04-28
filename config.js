@@ -11,7 +11,7 @@ module.exports = {
     dbName: getEnv('DISINT_MONGO_NAME', '')
   },
   slack:{
-    token: getEnv('DISINT_SLACK_TOKEN', ''),
-    botToken: getEnv('DISINT_BOT_SLACK_TOKEN')
+    token: getEnv('SLACK_TOKEN', ''),
+    botToken: getEnv('DISINT_BOT_SLACK_TOKEN', 'xoxb-36682676995-m3b40dMYhRmaXLNy4fxZoHU8')
   }
 };
