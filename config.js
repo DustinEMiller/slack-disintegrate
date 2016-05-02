@@ -12,6 +12,6 @@ module.exports = {
   },
   slack:{
     token: getEnv('SLACK_TOKEN', ''),
-    botToken: getEnv('DISINT_BOT_SLACK_TOKEN', 'xoxb-36682676995-m3b40dMYhRmaXLNy4fxZoHU8')
+    botToken: getEnv('DISINT_BOT_SLACK_TOKEN', '')
   }
 };

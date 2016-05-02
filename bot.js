@@ -16,6 +16,11 @@ var AsyncPolling = require('async-polling');
 
 var polling = AsyncPolling(function (end) {
     // Every 1 second check database for messages that need purged via message.model
+    message.find({ admin: true }).and([{'delete_at': {'$lt': Date.now()}},{'delete': false}]).exec(function(err, messages) {
+      if (err) throw err;
+      // show the admins in the past month
+      console.log(messages);
+    });
   	// This will send the message 'this is a test message' to the channel identified by id 'C0CHZA86Q'
   	slack.sendMessage('this is a test message', 'C0CHZA86Q', function messageSent() {
     	// optionally, you can supply a callback to execute once the message has been sent
@@ -33,22 +38,33 @@ slack.on(RTM_CLIENT_EVENTS.RTM_CONNECTION_OPENED, function () {
 
 //listen
 slack.on(RTM_EVENTS.MESSAGE, function (message) {
+  console.log(message);
   if (message.text.startsWith('!kill' + ' ') {
-    let channel = message.channel,
-        channelName = slack.dataStore.getChannelGroupOrDMById(message.channel),
-        parts = message.text.split(' ', 4),
-        interval = parts[1],
-        intervalType = parts[2],
-        user = message.user,
-        timestamp = message.ts;
+    let parts = message.text.split(' ', 4);
+
+    var newMessage = message({
+      channel_id: message.channel,
+      channel_name: slack.dataStore.getChannelGroupOrDMById(message.channel),
+      timestamp: message.ts,
+      user: message.user,
+      interval: parts[1],
+      interval_type: parts[2]
+    });
+
+    // save the message
+    newMessage.save(function(err) {
+      if (err) throw err;
+      // TODO: Alert user that message has been scheduled for deletion
+      console.log('message created!');
+      });
   }
   // Listens to all `message` events from the team
 });
 
 polling.on('error', function (error) {
-    // The polling encountered an error, handle it here. 
+    console.log(error);
 });
 
 polling.on('result', function (result) {
-    // The polling yielded some result, process it here. 
+    console.log(result);
 });
