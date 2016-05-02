@@ -51,7 +51,7 @@ messageSchema.pre('save', function(next) {
   	next();
 });
 
-var Message = mongoose.model('Message', messageSchema);
+var Message = mongoose.model('Messages', messageSchema);
 
 // make this available to our users in our Node applications
 module.exports = Message;

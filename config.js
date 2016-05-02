@@ -7,7 +7,7 @@ module.exports = {
     username: getEnv('DISINT_MONGO_USERNAME', ''),
     password: getEnv('DISINT_MONGO_PASSWORD', ''),
     host: getEnv('MONGO_HOST', 'localhost'),
-    port: getEnv.int('MONGO_PORT', 5984),
+    port: getEnv.int('MONGO_PORT', 27017),
     dbName: getEnv('DISINT_MONGO_NAME', '')
   },
   slack:{
