@@ -15,15 +15,16 @@ const RTM_EVENTS = require('@slack/client').RTM_EVENTS;
 var Message = require('./models/message');
 var AsyncPolling = require('async-polling');
 
-var polling = AsyncPolling(function (end) {
-  console.log('run');  
+var polling = AsyncPolling(function (end) { 
   // Every 1 second check database for messages that need purged via message.model
   Message.find().and([{'delete_at': {'$lt': Date.now()}},{'delete': false}]).exec(function(err, messages) {
     if (err) throw err;
     // show the admins in the past month
+    console.log('some');
     console.log(messages);
   });
-   Message.find().exec(function(err, messages) {
+
+  Message.find().exec(function(err, messages) {
     if (err) throw err;
     console.log('all');
     console.log(messages);
@@ -79,9 +80,11 @@ slack.on(RTM_EVENTS.MESSAGE, function (message) {
 });
 
 polling.on('error', function (error) {
-    console.log(error);
+  console.log('error');
+  console.log(error);
 });
 
 polling.on('result', function (result) {
-    console.log(result);
+  console.log('result');
+  console.log(result);
 });
