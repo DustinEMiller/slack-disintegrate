@@ -51,6 +51,10 @@ slack.on(RTM_EVENTS.MESSAGE, function (message) {
       intervalType = intervalParts[1];  
     }
 
+    console.log(parts);
+    console.log(intervalParts);
+    console.log(slack.dataStore.getChannelGroupOrDMById(message.channel));
+
     var newMessage = new Message({
       channel_id: message.channel,
       channel_name: slack.dataStore.getChannelGroupOrDMById(message.channel),
