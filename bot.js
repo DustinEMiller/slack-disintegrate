@@ -41,15 +41,24 @@ slack.on(RTM_CLIENT_EVENTS.RTM_CONNECTION_OPENED, function () {
 slack.on(RTM_EVENTS.MESSAGE, function (message) {
   console.log(message);
   if (message.text.startsWith('!kill' + ' ')) {
-    let parts = message.text.split(' ', 4);
+    let parts = message.text.split(' ', 3),
+        intervalParts = parts[1].split(/(\d+)/).filter(Boolean),
+        intervalType;
+
+    if(typeof intervalParts[1] === 'undefined') {
+      intervalType = 's';
+    } else {
+      intervalType = intervalParts[1];  
+    }
 
     var newMessage = new Message({
       channel_id: message.channel,
       channel_name: slack.dataStore.getChannelGroupOrDMById(message.channel),
       timestamp: message.ts,
+      team: message.team,
       user: message.user,
-      interval: parts[1],
-      interval_type: parts[2]
+      interval: intervalParts[0],
+      interval_type: intervalType
     });
 
     // save the message
