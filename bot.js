@@ -33,7 +33,7 @@ mongoose.connect('mongodb://'+config.mongo.username+':'+config.mongo.password+'@
 var polling = AsyncPolling(function (end) { 
   console.log(Date.now());
   // Every 1 second check database for messages that need purged via message.model
-  Message.find().and([{'delete_at': {'$lt': Date.now()}},{'delete': false}]).exec(function(err, messages) {
+  Message.find().and([{'delete_at': {'$lt': new Date()}},{'delete': false}]).exec(function(err, messages) {
     if (err) throw err;
     // show the admins in the past month
     console.log('some');
