@@ -40,7 +40,7 @@ slack.on(RTM_CLIENT_EVENTS.RTM_CONNECTION_OPENED, function () {
 //listen
 slack.on(RTM_EVENTS.MESSAGE, function (message) {
 
-  if(typeof message !== 'undefined') {
+  if(typeof message.text !== 'undefined') {
     if (message.text.startsWith('!kill' + ' ')) {
     let parts = message.text.split(' ', 3),
         intervalParts = parts[1].split(/(\d+)/).filter(Boolean),
