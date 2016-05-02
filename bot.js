@@ -58,36 +58,36 @@ slack.on(RTM_CLIENT_EVENTS.RTM.AUTHENTICATED, function () {
 
 //listen
 slack.on(RTM_EVENTS.MESSAGE, function (message) {
-
+  console.log(message);
   if(typeof message.text !== 'undefined') {
     if (message.text.startsWith('!kill' + ' ')) {
-    let parts = message.text.split(' ', 3),
-        intervalParts = parts[1].split(/(\d+)/).filter(Boolean),
-        intervalType;
+      let parts = message.text.split(' ', 3),
+          intervalParts = parts[1].split(/(\d+)/).filter(Boolean),
+          intervalType;
 
-    if(typeof intervalParts[1] === 'undefined') {
-      intervalType = 's';
-    } else {
-      intervalType = intervalParts[1];  
-    }
+      if(typeof intervalParts[1] === 'undefined') {
+        intervalType = 's';
+      } else {
+        intervalType = intervalParts[1];  
+      }
 
-    var newMessage = new Message({
-      channel_id: message.channel,
-      channel_name: slack.dataStore.getChannelGroupOrDMById(message.channel).name,
-      timestamp: message.ts,
-      team: message.team,
-      user: message.user,
-      interval: intervalParts[0],
-      interval_type: intervalType
-    });
-
-    // save the message
-    newMessage.save(function(err) {
-      if (err) throw err;
-      // TODO: Alert user that message has been scheduled for deletion
-      console.log('message created!');
+      var newMessage = new Message({
+        channel_id: message.channel,
+        channel_name: slack.dataStore.getChannelGroupOrDMById(message.channel).name,
+        timestamp: message.ts,
+        team: message.team,
+        user: message.user,
+        interval: intervalParts[0],
+        interval_type: intervalType
       });
-  }
+      console.log(newMessage);
+      // save the message
+      newMessage.save(function(err) {
+        if (err) throw err;
+        // TODO: Alert user that message has been scheduled for deletion
+        console.log('message created!');
+        });
+    }
   // Listens to all `message` events from the team
   }
 });
