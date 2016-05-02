@@ -71,7 +71,7 @@ slack.on(RTM_EVENTS.MESSAGE, function (message) {
         intervalType = intervalParts[1];  
       }
 
-      var newMessage = Message({
+      var newMessage = new Message({
         channel_id: message.channel,
         channel_name: slack.dataStore.getChannelGroupOrDMById(message.channel).name,
         timestamp: message.ts,
