@@ -18,16 +18,22 @@ var AsyncPolling = require('async-polling');
 var polling = AsyncPolling(function (end) {
   console.log('run');  
   // Every 1 second check database for messages that need purged via message.model
-  Message.find({ admin: true }).and([{'delete_at': {'$lt': Date.now()}},{'delete': false}]).exec(function(err, messages) {
+  Message.find().and([{'delete_at': {'$lt': Date.now()}},{'delete': false}]).exec(function(err, messages) {
     if (err) throw err;
     // show the admins in the past month
+    console.log(messages);
+  });
+   Message.find().exec(function(err, messages) {
+    if (err) throw err;
+    console.log('all');
     console.log(messages);
   });
 	// This will send the message 'this is a test message' to the channel identified by id 'C0CHZA86Q'
 	//slack.sendMessage('this is a test message', 'C0CHZA86Q', function messageSent() {
   	// optionally, you can supply a callback to execute once the message has been sent
 	//});
-}, 1000);
+  end();
+}, 1000).run();
 
 slack.start();
 
