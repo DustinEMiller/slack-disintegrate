@@ -39,7 +39,7 @@ slack.on(RTM_CLIENT_EVENTS.RTM_CONNECTION_OPENED, function () {
 //listen
 slack.on(RTM_EVENTS.MESSAGE, function (message) {
   console.log(message);
-  if (message.text.startsWith('!kill' + ' ') {
+  if (message.text.startsWith('!kill' + ' ')) {
     let parts = message.text.split(' ', 4);
 
     var newMessage = message({
