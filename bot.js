@@ -11,8 +11,8 @@ const slack = new RtmClient(config.slack.botToken, {
 });
 const RTM_CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS;
 const RTM_EVENTS = require('@slack/client').RTM_EVENTS;
-const message = require('./models/message');
 
+var message = require('./models/message');
 var AsyncPolling = require('async-polling');
 
 var polling = AsyncPolling(function (end) {
@@ -43,7 +43,7 @@ slack.on(RTM_EVENTS.MESSAGE, function (message) {
   if (message.text.startsWith('!kill' + ' ')) {
     let parts = message.text.split(' ', 4);
 
-    var newMessage = message({
+    var newMessage = new message({
       channel_id: message.channel,
       channel_name: slack.dataStore.getChannelGroupOrDMById(message.channel),
       timestamp: message.ts,

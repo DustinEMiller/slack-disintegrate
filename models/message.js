@@ -40,7 +40,7 @@ messageSchema.pre('save', function(next) {
 			this.delete_at.setTime(this.delete_at.getTime() + this.interval*3600000);	
 		} else if(intvl === 'm' || intvl === 'minute') {
 			this.delete_at.setTime(this.delete_at.getTime() + this.interval*60000); 	
-		} else if(intvl === 's' || intvl === 'second') {
+		} else if(intvl === 's' || intvl === 'second' || intvl === '') {
 			this.delete_at.setTime(this.delete_at.getTime() + this.interval*1000);	
 		} else {
 			this.delete_at = undefined;
