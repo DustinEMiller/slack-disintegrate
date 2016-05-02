@@ -2,6 +2,7 @@
 
 const RtmClient = require('@slack/client').RtmClient;
 const config = require('./config');
+const MemoryDataStore = require('@slack/client').MemoryDataStore;
 const slack = new RtmClient(config.slack.botToken, {
   logLevel: 'error', 
   dataStore: new MemoryDataStore(),
