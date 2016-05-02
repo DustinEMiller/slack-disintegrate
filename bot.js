@@ -16,24 +16,23 @@ var Message = require('./models/message');
 var AsyncPolling = require('async-polling');
 
 var polling = AsyncPolling(function (end) {
-    // Every 1 second check database for messages that need purged via message.model
-    Message.find({ admin: true }).and([{'delete_at': {'$lt': Date.now()}},{'delete': false}]).exec(function(err, messages) {
-      if (err) throw err;
-      // show the admins in the past month
-      console.log(messages);
-    });
-  	// This will send the message 'this is a test message' to the channel identified by id 'C0CHZA86Q'
-  	slack.sendMessage('this is a test message', 'C0CHZA86Q', function messageSent() {
-    	// optionally, you can supply a callback to execute once the message has been sent
-  	});
-  	// Here I want to stop the polling: 
-    this.stop();
-    end();
+  console.log('run');  
+  // Every 1 second check database for messages that need purged via message.model
+  Message.find({ admin: true }).and([{'delete_at': {'$lt': Date.now()}},{'delete': false}]).exec(function(err, messages) {
+    if (err) throw err;
+    // show the admins in the past month
+    console.log(messages);
+  });
+	// This will send the message 'this is a test message' to the channel identified by id 'C0CHZA86Q'
+	//slack.sendMessage('this is a test message', 'C0CHZA86Q', function messageSent() {
+  	// optionally, you can supply a callback to execute once the message has been sent
+	//});
 }, 1000);
 
 slack.start();
 
 slack.on(RTM_CLIENT_EVENTS.RTM_CONNECTION_OPENED, function () {
+  console.log('opened');  
   polling.run();
 });
 
@@ -51,10 +50,6 @@ slack.on(RTM_EVENTS.MESSAGE, function (message) {
     } else {
       intervalType = intervalParts[1];  
     }
-
-    console.log(parts);
-    console.log(intervalParts);
-    console.log(slack.dataStore.getChannelGroupOrDMById(message.channel));
 
     var newMessage = new Message({
       channel_id: message.channel,
