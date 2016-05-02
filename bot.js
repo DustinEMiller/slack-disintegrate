@@ -43,7 +43,7 @@ slack.on(RTM_EVENTS.MESSAGE, function (message) {
   if (message.text.startsWith('!kill' + ' ')) {
     let parts = message.text.split(' ', 4);
 
-    var newMessage = Message({
+    var newMessage = new Message({
       channel_id: message.channel,
       channel_name: slack.dataStore.getChannelGroupOrDMById(message.channel),
       timestamp: message.ts,
