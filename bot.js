@@ -39,6 +39,12 @@ var polling = AsyncPolling(function (end) {
     console.log('some');
     console.log(messages);
   });
+  Message.find().exec(function(err, messages) {
+    if (err) throw err;
+    // show the admins in the past month
+    console.log('all');
+    console.log(messages);
+  });
 	// This will send the message 'this is a test message' to the channel identified by id 'C0CHZA86Q'
 	//slack.sendMessage('this is a test message', 'C0CHZA86Q', function messageSent() {
   	// optionally, you can supply a callback to execute once the message has been sent
