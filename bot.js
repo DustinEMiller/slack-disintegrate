@@ -22,10 +22,12 @@ var mongoOpts = {
 }
 
 // Connect to MongoDB
-mongoose.connect('mongodb://'+config.mongo.username+':'+config.mongo.password+'@'+config.mongo.host+':'+config.mongo.port+'/'+config.mongo.dbName);
-mongoose.connection.on('error', function(err) {
-  console.error('MongoDB connection error: ' + err);
-  process.exit(-1);
+mongoose.connect('mongodb://'+config.mongo.username+':'+config.mongo.password+'@'+config.mongo.host+':'+config.mongo.port+'/'+config.mongo.dbName, function (err, res) {
+  if (err) { 
+    console.log ('ERROR connecting to: ' + config.mongo.dbName + '. ' + err);
+  } else {
+    console.log ('Succeeded connected to: ' + config.mongo.dbName);
+  }
 });
 
 var polling = AsyncPolling(function (end) { 
@@ -80,13 +82,8 @@ slack.on(RTM_EVENTS.MESSAGE, function (message) {
         interval: intervalParts[0],
         interval_type: intervalType
       });
-      console.log(newMessage);
-      // save the message
-      newMessage.save(function(err) {
-        if (err) throw err;
-        // TODO: Alert user that message has been scheduled for deletion
-        console.log('message created!');
-      });
+
+      newMessage.save(function (err) {if (err){ console.log ('Error on save!')}else{console.log('success');}} );
     }
   // Listens to all `message` events from the team
   }
