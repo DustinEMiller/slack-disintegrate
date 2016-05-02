@@ -33,7 +33,7 @@ var polling = AsyncPolling(function (end) {
   	// optionally, you can supply a callback to execute once the message has been sent
 	//});
   end();
-}, 1000).run();
+}, 1000);
 
 slack.start();
 
