@@ -71,7 +71,7 @@ slack.on(RTM_EVENTS.MESSAGE, function (message) {
         intervalType = intervalParts[1];  
       }
 
-      var newMessage = new Message({
+      var newMessage = Message({
         channel_id: message.channel,
         channel_name: slack.dataStore.getChannelGroupOrDMById(message.channel).name,
         timestamp: message.ts,
@@ -86,7 +86,7 @@ slack.on(RTM_EVENTS.MESSAGE, function (message) {
         if (err) throw err;
         // TODO: Alert user that message has been scheduled for deletion
         console.log('message created!');
-        });
+      });
     }
   // Listens to all `message` events from the team
   }
