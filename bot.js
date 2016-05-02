@@ -31,7 +31,7 @@ var polling = AsyncPolling(function (end) {
 
 slack.start();
 
-slack.on(RTM_CLIENT_EVENTS.RTM_CONNECTION_OPENED, function () {
+slack.on(RTM_CLIENT_EVENTS.RTM.AUTHENTICATED, function () {
   console.log('opened');  
   polling.run();
 });
