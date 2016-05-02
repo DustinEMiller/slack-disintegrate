@@ -33,16 +33,10 @@ mongoose.connect('mongodb://'+config.mongo.username+':'+config.mongo.password+'@
 var polling = AsyncPolling(function (end) { 
   console.log(new Date());
   // Every 1 second check database for messages that need purged via message.model
-  Message.find().and([{'delete_at': {'$lt': new Date()}},{'delete': false}]).exec(function(err, messages) {
+  Message.find().and([{'delete_at': {'$lt': new Date()}},{'deleted': false}]).exec(function(err, messages) {
     if (err) throw err;
     // show the admins in the past month
     console.log('some');
-    console.log(messages);
-  });
-  Message.find().exec(function(err, messages) {
-    if (err) throw err;
-    // show the admins in the past month
-    console.log('all');
     console.log(messages);
   });
 	// This will send the message 'this is a test message' to the channel identified by id 'C0CHZA86Q'
