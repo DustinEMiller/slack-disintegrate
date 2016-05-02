@@ -6,7 +6,7 @@ module.exports = {
   mongo:{
     username: getEnv('DISINT_MONGO_USERNAME', ''),
     password: getEnv('DISINT_MONGO_PASSWORD', ''),
-    url: getEnv('MONGO_URL', 'http://127.0.0.1'),
+    host: getEnv('MONGO_HOST', 'localhost'),
     port: getEnv.int('MONGO_PORT', 5984),
     dbName: getEnv('DISINT_MONGO_NAME', '')
   },
