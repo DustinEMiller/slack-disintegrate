@@ -10,6 +10,7 @@ var messageSchema = new Schema({
 	user: { type: String, required: true },
 	interval: { type: Number, required: true },
 	interval_type: { type: String, required: true },
+	team: { type: String, required: true },
 	deleted: {type: Boolean, default: false},
 	created_at: Date,
   	updated_at: Date,

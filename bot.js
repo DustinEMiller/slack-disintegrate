@@ -57,7 +57,7 @@ slack.on(RTM_EVENTS.MESSAGE, function (message) {
 
     var newMessage = new Message({
       channel_id: message.channel,
-      channel_name: slack.dataStore.getChannelGroupOrDMById(message.channel),
+      channel_name: slack.dataStore.getChannelGroupOrDMById(message.channel).name,
       timestamp: message.ts,
       team: message.team,
       user: message.user,
