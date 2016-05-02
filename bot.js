@@ -39,8 +39,9 @@ slack.on(RTM_CLIENT_EVENTS.RTM_CONNECTION_OPENED, function () {
 
 //listen
 slack.on(RTM_EVENTS.MESSAGE, function (message) {
-  console.log(message);
-  if (message.text.startsWith('!kill' + ' ')) {
+
+  if(typeof message !== 'undefined') {
+    if (message.text.startsWith('!kill' + ' ')) {
     let parts = message.text.split(' ', 3),
         intervalParts = parts[1].split(/(\d+)/).filter(Boolean),
         intervalType;
@@ -73,6 +74,7 @@ slack.on(RTM_EVENTS.MESSAGE, function (message) {
       });
   }
   // Listens to all `message` events from the team
+  }
 });
 
 polling.on('error', function (error) {
