@@ -12,12 +12,12 @@ const slack = new RtmClient(config.slack.botToken, {
 const RTM_CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS;
 const RTM_EVENTS = require('@slack/client').RTM_EVENTS;
 
-var message = require('./models/message');
+var Message = require('./models/message');
 var AsyncPolling = require('async-polling');
 
 var polling = AsyncPolling(function (end) {
     // Every 1 second check database for messages that need purged via message.model
-    message.find({ admin: true }).and([{'delete_at': {'$lt': Date.now()}},{'delete': false}]).exec(function(err, messages) {
+    Message.find({ admin: true }).and([{'delete_at': {'$lt': Date.now()}},{'delete': false}]).exec(function(err, messages) {
       if (err) throw err;
       // show the admins in the past month
       console.log(messages);
@@ -43,7 +43,7 @@ slack.on(RTM_EVENTS.MESSAGE, function (message) {
   if (message.text.startsWith('!kill' + ' ')) {
     let parts = message.text.split(' ', 4);
 
-    var newMessage = new message({
+    var newMessage = Message({
       channel_id: message.channel,
       channel_name: slack.dataStore.getChannelGroupOrDMById(message.channel),
       timestamp: message.ts,
