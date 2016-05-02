@@ -23,7 +23,7 @@ var mongoOpts = {
 'mongodb://username:password@host:port/database?options...'
 
 // Connect to MongoDB
-mongoose.connect('mongodb://'+config.mongo.username+':'+config.mongo.password'@'+config.mongo.url+':'+config.mongo.port+'/'+config.mongo.dbName);
+mongoose.connect('mongodb://'+config.mongo.username+':'+config.mongo.password+'@'+config.mongo.url+':'+config.mongo.port+'/'+config.mongo.dbName);
 mongoose.connection.on('error', function(err) {
   console.error('MongoDB connection error: ' + err);
   process.exit(-1);
