@@ -14,6 +14,20 @@ const RTM_EVENTS = require('@slack/client').RTM_EVENTS;
 
 var Message = require('./models/message');
 var AsyncPolling = require('async-polling');
+var mongoose = require('mongoose');
+var mongoOpts = {
+  db: { native_parser: true },
+  user: config.mongo.username,
+  pass: config.mongo.password
+}
+'mongodb://username:password@host:port/database?options...'
+
+// Connect to MongoDB
+mongoose.connect('mongodb://'+config.mongo.username+':'+config.mongo.password'@'+config.mongo.url+':'+config.mongo.port+'/'+config.mongo.dbName);
+mongoose.connection.on('error', function(err) {
+  console.error('MongoDB connection error: ' + err);
+  process.exit(-1);
+});
 
 var polling = AsyncPolling(function (end) { 
   // Every 1 second check database for messages that need purged via message.model
