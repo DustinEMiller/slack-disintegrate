@@ -76,13 +76,20 @@ slack.on(RTM_EVENTS.MESSAGE, (message) => {
   if(typeof message.text !== 'undefined') {
     if (message.text.startsWith('!kill' + ' ')) {
       let parts = message.text.split(' ', 3),
-          intervalParts = parts[1].split(/(\d+)/).filter(Boolean),
-          intervalType;
+          intervalParts,
+          intervalType = 's',
+          interval = 10;
 
-      if(typeof intervalParts[1] === 'undefined') {
-        intervalType = 's';
-      } else {
-        intervalType = intervalParts[1];  
+      if(parts.length > 1) {
+        intervalParts = parts[1].split(/(\d+)/).filter(Boolean);
+
+        if(typeof intervalParts[0] !== 'undefined' && !isNaN(intervalParts[0])) {
+          interval = intervalParts[0];    
+        } 
+
+        if(typeof intervalParts[1] !== 'undefined') {
+          intervalType = intervalParts[1];  
+        }  
       }
 
       let newMessage = new Message({
@@ -91,7 +98,7 @@ slack.on(RTM_EVENTS.MESSAGE, (message) => {
         timestamp: message.ts,
         team: message.team,
         user: message.user,
-        interval: intervalParts[0],
+        interval: interval,
         interval_type: intervalType
       });
 

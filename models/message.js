@@ -43,7 +43,7 @@ messageSchema.pre('save', function(next) {
 		} else if(intvl === 's' || intvl === 'second' || intvl === '') {
 			this.delete_at.setTime(this.delete_at.getTime() + this.interval*1000);	
 		} else {
-			this.delete_at = undefined;
+			this.delete_at.setTime(this.delete_at.getTime() + 10*1000);
 		}
 	}
 
@@ -52,5 +52,4 @@ messageSchema.pre('save', function(next) {
 
 const Message = mongoose.model('Messages', messageSchema);
 
-// make this available to our users in our Node applications
 module.exports = Message;
