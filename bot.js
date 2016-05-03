@@ -96,7 +96,7 @@ slack.on(RTM_EVENTS.MESSAGE, (message) => {
       });
 
       newMessage.save((error) => {
-        if (err) { 
+        if (error) { 
           console.log('Error on save!');
         } else {
           console.log('success');
