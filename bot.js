@@ -39,7 +39,9 @@ var polling = AsyncPolling(function (end) {
     if (err) throw err;
     
     messages.map(function(message) {
-      slackWeb.chat.delete(message.timestamp, message.channel_id);  
+      slackWeb.chat.delete(message.timestamp, message.channel_id);
+      message.deleted = true;
+      message.save(function (err) {if (err){ console.log ('Error on save!')}else{console.log('success');}});
     });
     
     console.log('some');
