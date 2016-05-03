@@ -39,7 +39,7 @@ var polling = AsyncPolling(function (end) {
     if (err) throw err;
     
     messages.map(function(message) {
-      slackWeb.delete(message.timestamp, message.channel_id);  
+      slackWeb.ChatFacet.delete(message.timestamp, message.channel_id);  
     });
     
     console.log('some');
