@@ -1,6 +1,7 @@
 'use strict';
 
 const RtmClient = require('@slack/client').RtmClient;
+const WebClient = require('@slack/client').WebClient;
 const config = require('./config');
 const MemoryDataStore = require('@slack/client').MemoryDataStore;
 const slack = new RtmClient(config.slack.botToken, {
@@ -9,6 +10,7 @@ const slack = new RtmClient(config.slack.botToken, {
   autoReconnect: true,
   autoMark: true
 });
+const slackWeb = new WebClient(config.slack.botToken);
 const RTM_CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS;
 const RTM_EVENTS = require('@slack/client').RTM_EVENTS;
 
@@ -35,7 +37,11 @@ var polling = AsyncPolling(function (end) {
   // Every 1 second check database for messages that need purged via message.model
   Message.find().and([{'delete_at': {'$lt': new Date()}},{'deleted': false}]).exec(function(err, messages) {
     if (err) throw err;
-    // show the admins in the past month
+    
+    messages.map(function(message) {
+      slackWeb.delete(message.timestamp, message.channel_id);  
+    });
+    
     console.log('some');
     console.log(messages);
   });
