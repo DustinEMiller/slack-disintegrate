@@ -1,24 +1,23 @@
 'use strict'
 
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-
-var messageSchema = new Schema({
-	channel_id: { type: String, required: true },
-	channel_name: { type: String, required: true },
-	timestamp: { type: String, required: true },
-	user: { type: String, required: true },
-	interval: { type: Number, required: true },
-	interval_type: { type: String, required: true },
-	team: { type: String, required: true },
-	deleted: {type: Boolean, default: false},
-	created_at: Date,
-  	updated_at: Date,
-  	delete_at: Date
-});
+const mongoose = require('mongoose'),
+	Schema = mongoose.Schema,
+	messageSchema = new Schema({
+		channel_id: { type: String, required: true },
+		channel_name: { type: String, required: true },
+		timestamp: { type: String, required: true },
+		user: { type: String, required: true },
+		interval: { type: Number, required: true },
+		interval_type: { type: String, required: true },
+		team: { type: String, required: true },
+		deleted: {type: Boolean, default: false},
+		created_at: Date,
+	  	updated_at: Date,
+	  	delete_at: Date
+	});
 
 messageSchema.pre('save', function(next) {
-  	var currentDate = new Date(),
+  	let currentDate = new Date(),
   		intvl = this.interval_type.toLowerCase();
   
   	this.updated_at = currentDate;
@@ -51,7 +50,7 @@ messageSchema.pre('save', function(next) {
   	next();
 });
 
-var Message = mongoose.model('Messages', messageSchema);
+const Message = mongoose.model('Messages', messageSchema);
 
 // make this available to our users in our Node applications
 module.exports = Message;

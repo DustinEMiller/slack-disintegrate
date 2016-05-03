@@ -13,12 +13,8 @@
     "async-polling": "^0.2.1",
     "bluebird": "^3.3.5",
     "getenv": "^0.6.0",
-    "hapi": "^13.2.2",
-    "hapi-auth-basic": "^4.1.0",
-    "joi": "^8.0.5",
     "mongoose": "^4.4.12",
     "node-uuid": "^1.4.7",
-    "request": "^2.69.0"
   },
   "engines": {
     "node": "6.x"

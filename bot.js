@@ -1,27 +1,59 @@
 'use strict';
 
-const RtmClient = require('@slack/client').RtmClient;
-const WebClient = require('@slack/client').WebClient;
-const config = require('./config');
-const MemoryDataStore = require('@slack/client').MemoryDataStore;
-const slack = new RtmClient(config.slack.botToken, {
-  logLevel: 'error', 
-  dataStore: new MemoryDataStore(),
-  autoReconnect: true,
-  autoMark: true
-});
-const slackWeb = new WebClient(config.slack.token);
-const RTM_CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS;
-const RTM_EVENTS = require('@slack/client').RTM_EVENTS;
+const RtmClient = require('@slack/client').RtmClient,
+  WebClient = require('@slack/client').WebClient,
+  config = require('./config'),
+  MemoryDataStore = require('@slack/client').MemoryDataStore,
+  slack = new RtmClient(config.slack.botToken, {
+    logLevel: 'error', 
+    dataStore: new MemoryDataStore(),
+    autoReconnect: true,
+    autoMark: true
+  }),
+  slackWeb = new WebClient(config.slack.token),
+  RTM_CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS,
+  RTM_EVENTS = require('@slack/client').RTM_EVENTS,
+  Message = require('./models/message'),
+  AsyncPolling = require('async-polling'),
+  mongoose = require('mongoose'),
+  mongoOpts = {
+    db: { native_parser: true },
+    user: config.mongo.username,
+    pass: config.mongo.password
+  };
 
-var Message = require('./models/message');
-var AsyncPolling = require('async-polling');
-var mongoose = require('mongoose');
-var mongoOpts = {
-  db: { native_parser: true },
-  user: config.mongo.username,
-  pass: config.mongo.password
-}
+const polling = AsyncPolling((end) => { 
+  // Every 1 second check database for messages that need purged via message.model
+  Message.find().and([
+      {'delete_at': {'$lt': new Date()}},
+      {'deleted': false}])
+    .exec((err, messages) => {
+
+      if (err) throw err;
+      
+      messages.map((message) => {
+        slackWeb.chat.delete(message.timestamp, message.channel_id)
+          .then((result) => {
+            message.deleted = true;
+            message.save((err) => {
+              if (err) { 
+                console.log ('Error on save!')
+              } else {
+                console.log('success');
+              }
+            });
+          })
+          .catch((error) => {
+
+          });
+      }); 
+    });
+  // This will send the message 'this is a test message' to the channel identified by id 'C0CHZA86Q'
+  //slack.sendMessage('this is a test message', 'C0CHZA86Q', function messageSent() {
+    // optionally, you can supply a callback to execute once the message has been sent
+  //});
+  end();
+}, 1000);
 
 // Connect to MongoDB
 mongoose.connect('mongodb://'+config.mongo.username+':'+config.mongo.password+'@'+config.mongo.host+':'+config.mongo.port+'/'+config.mongo.dbName, function (err, res) {
@@ -32,38 +64,15 @@ mongoose.connect('mongodb://'+config.mongo.username+':'+config.mongo.password+'@
   }
 });
 
-var polling = AsyncPolling(function (end) { 
-  console.log(new Date());
-  // Every 1 second check database for messages that need purged via message.model
-  Message.find().and([{'delete_at': {'$lt': new Date()}},{'deleted': false}]).exec(function(err, messages) {
-    if (err) throw err;
-    
-    messages.map(function(message) {
-      slackWeb.chat.delete(message.timestamp, message.channel_id);
-      message.deleted = true;
-      message.save(function (err) {if (err){ console.log ('Error on save!')}else{console.log('success');}});
-    });
-    
-    console.log('some');
-    console.log(messages);
-  });
-	// This will send the message 'this is a test message' to the channel identified by id 'C0CHZA86Q'
-	//slack.sendMessage('this is a test message', 'C0CHZA86Q', function messageSent() {
-  	// optionally, you can supply a callback to execute once the message has been sent
-	//});
-  end();
-}, 1000);
-
 slack.start();
 
-slack.on(RTM_CLIENT_EVENTS.RTM.AUTHENTICATED, function () {
-  console.log('opened');  
+slack.on(RTM_CLIENT_EVENTS.RTM.AUTHENTICATED, () => {
   polling.run();
 });
 
-//listen
-slack.on(RTM_EVENTS.MESSAGE, function (message) {
-  console.log(message);
+// Listen for message events from our connected channels
+slack.on(RTM_EVENTS.MESSAGE, (message) => {
+
   if(typeof message.text !== 'undefined') {
     if (message.text.startsWith('!kill' + ' ')) {
       let parts = message.text.split(' ', 3),
@@ -76,7 +85,7 @@ slack.on(RTM_EVENTS.MESSAGE, function (message) {
         intervalType = intervalParts[1];  
       }
 
-      var newMessage = new Message({
+      let newMessage = new Message({
         channel_id: message.channel,
         channel_name: slack.dataStore.getChannelGroupOrDMById(message.channel).name,
         timestamp: message.ts,
@@ -86,18 +95,21 @@ slack.on(RTM_EVENTS.MESSAGE, function (message) {
         interval_type: intervalType
       });
 
-      newMessage.save(function (err) {if (err){ console.log ('Error on save!')}else{console.log('success');}} );
+      newMessage.save((error) => {
+        if (err) { 
+          console.log('Error on save!');
+        } else {
+          console.log('success');
+        }
+      });
     }
-  // Listens to all `message` events from the team
   }
 });
 
-polling.on('error', function (error) {
-  console.log('error');
+polling.on('error', (error) => {
   console.log(error);
 });
 
-polling.on('result', function (result) {
-  console.log('result');
+polling.on('result', (result) => {
   console.log(result);
 });
