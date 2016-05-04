@@ -11,6 +11,7 @@ const mongoose = require('mongoose'),
 		interval_type: { type: String, required: true },
 		team: { type: String, required: true },
 		deleted: {type: Boolean, default: false},
+		user_name: {type: String, required: true },
 		created_at: Date,
 	  	updated_at: Date,
 	  	delete_at: Date
