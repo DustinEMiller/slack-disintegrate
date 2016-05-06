@@ -10,7 +10,7 @@ const RtmClient = require('@slack/client').RtmClient,
     autoReconnect: true,
     autoMark: true
   }),
-  slackWeb = new WebClient(config.slack.token),
+  slackWeb = new WebClient(config.slack.botToken),
   RTM_CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS,
   RTM_EVENTS = require('@slack/client').RTM_EVENTS,
   Message = require('./models/message'),
