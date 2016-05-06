@@ -4,13 +4,14 @@ const RtmClient = require('@slack/client').RtmClient,
   WebClient = require('@slack/client').WebClient,
   config = require('./config'),
   MemoryDataStore = require('@slack/client').MemoryDataStore,
-  slack = new RtmClient(config.slack.botToken, {
+  messageClient = new RtmClient(config.slack.botToken, {
     logLevel: 'error', 
     dataStore: new MemoryDataStore(),
     autoReconnect: true,
     autoMark: true
   }),
-  slackWeb = new WebClient(config.slack.botToken),
+  botCommunicator = new WebClient(config.slack.botToken),
+  chatForeman = new WebClient(config.slack.token),
   RTM_CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS,
   RTM_EVENTS = require('@slack/client').RTM_EVENTS,
   Message = require('./models/message'),
@@ -50,7 +51,7 @@ const polling = AsyncPolling((end) => {
       if (err) throw err;
       
       messages.map((message) => {
-        slackWeb.chat.delete(message.timestamp, message.channel_id)
+        chatForeman.chat.delete(message.timestamp, message.channel_id)
           .then((result) => {
             message.deleted = true;
             message.save((err) => {
@@ -59,7 +60,7 @@ const polling = AsyncPolling((end) => {
               } else {
                 index = Math.floor((Math.random() * messageDeletedRes.length) + 0);
               
-                slackWeb.chat.postMessage(message.user, messageDeletedRes[index], chatOptions)
+                botCommunicator.chat.postMessage(message.user, messageDeletedRes[index], chatOptions)
                   .then((result) => {
                     console.log('Successfully sent confirmation message');
                   })
@@ -87,14 +88,14 @@ mongoose.connect('mongodb://'+config.mongo.username+':'+config.mongo.password+'@
   }
 });
 
-slack.start();
+messageClient.start();
 
-slack.on(RTM_CLIENT_EVENTS.RTM.AUTHENTICATED, () => {
+messageClient.on(RTM_CLIENT_EVENTS.RTM.AUTHENTICATED, () => {
   polling.run();
 });
 
 // Listen for message events from our connected channels
-slack.on(RTM_EVENTS.MESSAGE, (message) => {
+messageClient.on(RTM_EVENTS.MESSAGE, (message) => {
 
   if(typeof message.text !== 'undefined') {
     if (message.text.startsWith('!kill' + ' ')) {
@@ -116,12 +117,12 @@ slack.on(RTM_EVENTS.MESSAGE, (message) => {
         }  
       }
 
-      slackWeb.users.info(message.user)
+      chatForeman.users.info(message.user)
         .then((result) => {
           
           let newMessage = new Message({
             channel_id: message.channel,
-            channel_name: slack.dataStore.getChannelGroupOrDMById(message.channel).name,
+            channel_name: messageClient.dataStore.getChannelGroupOrDMById(message.channel).name,
             timestamp: message.ts,
             team: message.team,
             user: message.user,
@@ -136,7 +137,7 @@ slack.on(RTM_EVENTS.MESSAGE, (message) => {
             } else {
               index = Math.floor((Math.random() * messageReceivedRes.length) + 0);
               
-              slackWeb.chat.postMessage(result.user.id, messageReceivedRes[index], chatOptions)
+              botCommunicator.chat.postMessage(result.user.id, messageReceivedRes[index], chatOptions)
                 .then((result) => {
                   console.log('Successfully sent confirmation message');
                 })
