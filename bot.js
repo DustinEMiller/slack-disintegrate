@@ -113,8 +113,8 @@ slack.on(RTM_EVENTS.MESSAGE, (message) => {
               console.log('success');
             }
           });
-console.log(result);
-          slackWeb.chat.postMessage(result.user.id, text)
+
+          slackWeb.chat.postMessage(result.user.id, 'Hasta la vista to that message')
             .then((result) => {
               console.log(result);
               message.deleted = true;
