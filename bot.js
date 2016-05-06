@@ -114,8 +114,9 @@ slack.on(RTM_EVENTS.MESSAGE, (message) => {
             }
           });
 
-          slackWeb.chat.postMessage(result.user.name, text, opts, optCb)
+          slackWeb.chat.postMessage(result.user.id, text, opts, optCb)
             .then((result) => {
+              console.log(result);
               message.deleted = true;
               message.save((err) => {
                 if (err) { 
