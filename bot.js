@@ -114,7 +114,11 @@ slack.on(RTM_EVENTS.MESSAGE, (message) => {
             }
           });
 
-          slackWeb.chat.postMessage(result.user.id, 'Hasta la vista to that message')
+          let options = {
+            as_user: true
+          }
+
+          slackWeb.chat.postMessage(result.user.id, 'Hasta la vista to that message', options)
             .then((result) => {
               console.log(result);
               message.deleted = true;
