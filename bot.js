@@ -20,7 +20,25 @@ const RtmClient = require('@slack/client').RtmClient,
     db: { native_parser: true },
     user: config.mongo.username,
     pass: config.mongo.password
-  };
+  },
+  chatOptions = {
+    as_user:true
+  },
+  messageReceivedRes = [
+    'Target acquired.',
+    'Affirmative.',
+    'Message scheduled for termination. Now, come with me if you want to live.',
+    'Message shall be terminated. No problemo.',
+    'It\'s in your nature to destroy your messages.',
+    'I need your clothes, your boots and your messages that need terminated.'
+  ],
+  messageDeletedRes = [
+    'Hasta la vista, message.',
+    'Message terminated.',
+    'Terminated.',
+    'I\'ll be back back. That message, won\'t.',
+    'Target destroyed.',
+  ];
 
 const polling = AsyncPolling((end) => { 
   // Every 1 second check database for messages that need purged via message.model
@@ -39,19 +57,31 @@ const polling = AsyncPolling((end) => {
               if (err) { 
                 console.log ('Error on save!')
               } else {
-                console.log('success');
-              }
+                index = Math.floor((Math.random() * messageDeletedRes.length) + 0);
+              
+                slackWeb.chat.postMessage(result.user.id, messageDeletedRes[index], chatOptions)
+                  .then((result) => {
+                    console.log('Successfully sent confirmation message');
+                  })
+                  .catch((error) => {
+                    console.log('Error sending confirmation message');
+                  });
+                  }
+                }
             });
           })
           .catch((error) => {
-
+            slackWeb.chat.postMessage(result.user.id, 'Message termination: fail. Skynet is interferring with communication channels.', chatOptions)
+              .then((result) => {
+                console.log('Successfully sent confirmation message');
+              })
+              .catch((error) => {
+                console.log('Error sending confirmation message');
+              });
           });
       }); 
     });
-  // This will send the message 'this is a test message' to the channel identified by id 'C0CHZA86Q'
-  //slack.sendMessage('this is a test message', 'C0CHZA86Q', function messageSent() {
-    // optionally, you can supply a callback to execute once the message has been sent
-  //});
+
   end();
 }, 1000);
 
@@ -78,7 +108,8 @@ slack.on(RTM_EVENTS.MESSAGE, (message) => {
       let parts = message.text.split(' ', 3),
           intervalParts,
           intervalType = 's',
-          interval = 10;
+          interval = 10,
+          index;
 
       if(parts.length > 1) {
         intervalParts = parts[1].split(/(\d+)/).filter(Boolean);
@@ -108,44 +139,34 @@ slack.on(RTM_EVENTS.MESSAGE, (message) => {
 
           newMessage.save((error) => {
             if (error) { 
-              console.log('Error on save!');
+              console.log('Error on message save!');
             } else {
-              console.log('success');
-            }
+              index = Math.floor((Math.random() * messageReceivedRes.length) + 0);
+              
+              slackWeb.chat.postMessage(result.user.id, messageReceivedRes[index], chatOptions)
+                .then((result) => {
+                  console.log('Successfully sent confirmation message');
+                })
+                .catch((error) => {
+                  console.log('Error sending confirmation message');
+                });
+              }
           });
 
-          let options = {
-            as_user: true
-          }
-
-          slackWeb.chat.postMessage(result.user.id, 'Hasta la vista to that message', options)
-            .then((result) => {
-              console.log(result);
-              message.deleted = true;
-              message.save((err) => {
-                if (err) { 
-                  console.log ('Error on save!')
-                } else {
-                  console.log('success');
-                }
-              });
-            })
-            .catch((error) => {
-              console.log('error1');
-              console.log(error);
-            });
         })
         .catch((error) => {
-          console.log(error);
+          slackWeb.chat.postMessage(result.user.id, 'Message scheduled for deletion: fail. Skynet is interferring with communication channels.', chatOptions)
+            .then((result) => {
+              console.log('Successfully sent confirmation message');
+            })
+            .catch((error) => {
+              console.log('Error sending confirmation message');
+            });
         });
     }
   }
 });
 
 polling.on('error', (error) => {
-  console.log(error);
-});
-
-polling.on('result', (result) => {
-  console.log(result);
+  console.log('Polling error');
 });
