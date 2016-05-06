@@ -58,7 +58,7 @@ const polling = AsyncPolling((end) => {
               if (err) { 
                 console.log ('Error on save!')
               } else {
-                index = Math.floor((Math.random() * messageDeletedRes.length) + 0);
+                let index = Math.floor((Math.random() * messageDeletedRes.length) + 0);
               
                 botCommunicator.chat.postMessage(message.user, messageDeletedRes[index], chatOptions)
                   .then((result) => {
