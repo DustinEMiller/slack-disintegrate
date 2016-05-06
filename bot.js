@@ -59,7 +59,7 @@ const polling = AsyncPolling((end) => {
               } else {
                 index = Math.floor((Math.random() * messageDeletedRes.length) + 0);
               
-                slackWeb.chat.postMessage(result.user.id, messageDeletedRes[index], chatOptions)
+                slackWeb.chat.postMessage(message.user, messageDeletedRes[index], chatOptions)
                   .then((result) => {
                     console.log('Successfully sent confirmation message');
                   })
