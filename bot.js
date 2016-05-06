@@ -113,7 +113,7 @@ slack.on(RTM_EVENTS.MESSAGE, (message) => {
               console.log('success');
             }
           });
-
+console.log(result);
           slackWeb.chat.postMessage(result.user.id, text)
             .then((result) => {
               console.log(result);
@@ -127,11 +127,12 @@ slack.on(RTM_EVENTS.MESSAGE, (message) => {
               });
             })
             .catch((error) => {
-
+              console.log('error1');
+              console.log(error);
             });
         })
         .catch((error) => {
-
+          console.log(error);
         });
     }
   }
