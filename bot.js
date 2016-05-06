@@ -70,13 +70,7 @@ const polling = AsyncPolling((end) => {
             });
           })
           .catch((error) => {
-            slackWeb.chat.postMessage(result.user.id, 'Message termination: fail. Skynet is interferring with communication channels.', chatOptions)
-              .then((result) => {
-                console.log('Successfully sent confirmation message');
-              })
-              .catch((error) => {
-                console.log('Error sending confirmation message');
-              });
+            console.log(error);
           });
       }); 
     });
@@ -154,13 +148,7 @@ slack.on(RTM_EVENTS.MESSAGE, (message) => {
 
         })
         .catch((error) => {
-          slackWeb.chat.postMessage(result.user.id, 'Message scheduled for deletion: fail. Skynet is interferring with communication channels.', chatOptions)
-            .then((result) => {
-              console.log('Successfully sent confirmation message');
-            })
-            .catch((error) => {
-              console.log('Error sending confirmation message');
-            });
+          console.log(error);
         });
     }
   }
