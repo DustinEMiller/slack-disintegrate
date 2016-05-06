@@ -66,7 +66,6 @@ const polling = AsyncPolling((end) => {
                   .catch((error) => {
                     console.log('Error sending confirmation message');
                   });
-                  }
                 }
             });
           })
