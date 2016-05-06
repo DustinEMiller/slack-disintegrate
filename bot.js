@@ -92,23 +92,46 @@ slack.on(RTM_EVENTS.MESSAGE, (message) => {
         }  
       }
 
-      let newMessage = new Message({
-        channel_id: message.channel,
-        channel_name: slack.dataStore.getChannelGroupOrDMById(message.channel).name,
-        timestamp: message.ts,
-        team: message.team,
-        user: message.user,
-        interval: interval,
-        interval_type: intervalType
-      });
+      slackWeb.users.info(message.user)
+        .then((result) => {
+          
+          let newMessage = new Message({
+            channel_id: message.channel,
+            channel_name: slack.dataStore.getChannelGroupOrDMById(message.channel).name,
+            timestamp: message.ts,
+            team: message.team,
+            user: message.user,
+            user_name: result.user.name,
+            interval: interval,
+            interval_type: intervalType
+          });
 
-      newMessage.save((error) => {
-        if (error) { 
-          console.log('Error on save!');
-        } else {
-          console.log('success');
-        }
-      });
+          newMessage.save((error) => {
+            if (error) { 
+              console.log('Error on save!');
+            } else {
+              console.log('success');
+            }
+          });
+
+          slackWeb.chat.postMessage(result.user.name, text, opts, optCb)
+            .then((result) => {
+              message.deleted = true;
+              message.save((err) => {
+                if (err) { 
+                  console.log ('Error on save!')
+                } else {
+                  console.log('success');
+                }
+              });
+            })
+            .catch((error) => {
+
+            });
+        })
+        .catch((error) => {
+
+        });
     }
   }
 });
