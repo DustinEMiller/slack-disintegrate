@@ -169,3 +169,7 @@ slack.on(RTM_EVENTS.MESSAGE, (message) => {
 polling.on('error', (error) => {
   console.log('Polling error');
 });
+
+polling.on('result', (result) => {
+  console.log('Polling result');
+});
